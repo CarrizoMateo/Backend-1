@@ -1,0 +1,13 @@
+[
+  {
+    "id": "1",
+    "title": "Remera Boca Juniors 2000",
+    "description": "Camiseta retro",
+    "code": "boca-2000",
+    "price": 25000,
+    "status": true,
+    "stock": 10,
+    "category": "boca",
+    "thumbnails": ["ruta/imagen1.jpg"]
+  }
+]
