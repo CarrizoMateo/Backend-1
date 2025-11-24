@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Productos en tiempo real</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h1>Lista de Productos (Tiempo Real)</h1>
+
+  <ul id="product-list"></ul>
+
+  <h2>Agregar producto</h2>
+  <form id="add-form">
+    <input type="text" name="title" placeholder="Título" required />
+    <input type="text" name="description" placeholder="Descripción" required />
+    <input type="text" name="code" placeholder="Código" required />
+    <input type="number" name="price" placeholder="Precio" required />
+    <input type="text" name="category" placeholder="Categoría" required />
+    <input type="number" name="stock" placeholder="Stock" required />
+    <input type="text" name="thumbnails" placeholder="Imagen URL" required />
+    <button type="submit">Agregar</button>
+  </form>
+
+  <h2>Eliminar producto</h2>
+  <form id="delete-form">
+    <input type="text" name="id" placeholder="ID del producto" required />
+    <button type="submit">Eliminar</button>
+  </form>
+
+  <script>
+    const socket = io();
+
+    socket.on('productList', products => {
+      const list = document.getElementById('product-list');
+      list.innerHTML = '';
+      products.forEach(p => {
+        const item = document.createElement('li');
+        item.textContent = `${p.title} - $${p.price} (id: ${p.id})`;
+        list.appendChild(item);
+      });
+    });
+
+    document.getElementById('add-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target));
+      data.price = parseFloat(data.price);
+      data.stock = parseInt(data.stock);
+      data.status = true;
+      data.thumbnails = [data.thumbnails];
+      socket.emit('addProduct', data);
+      e.target.reset();
+    });
+
+    document.getElementById('delete-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const id = e.target.id.value;
+      socket.emit('deleteProduct', id);
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>
