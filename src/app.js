@@ -1,5 +1,3 @@
-// Paso 1 y 2: Handlebars y ruta /home
-// npm install express express-handlebars socket.io
 
 import express from 'express';
 import { engine } from 'express-handlebars';
@@ -49,18 +47,16 @@ app.get('/realtimeproducts', async (req, res) => {
 io.on('connection', async (socket) => {
   console.log('Cliente conectado');
 
-  // Emitir productos actuales al conectar
+
   const products = await productManager.getProducts();
   socket.emit('productList', products);
 
-  // Escuchar nuevo producto
   socket.on('addProduct', async (data) => {
     await productManager.addProduct(data);
     const updatedProducts = await productManager.getProducts();
     io.emit('productList', updatedProducts);
   });
 
-  // Escuchar eliminar producto
   socket.on('deleteProduct', async (id) => {
     await productManager.deleteProduct(id);
     const updatedProducts = await productManager.getProducts();
