@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Carrito {{cartId}}</title>
+</head>
+<body>
+  <h1>Carrito ID: {{cartId}}</h1>
+
+  {{#if products.length}}
+    <ul>
+      {{#each products}}
+        <li>
+          {{title}} - ${{price}} x {{quantity}} = <strong>${{subtotal}}</strong>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p>El carrito está vacío.</p>
+  {{/if}}
+</body>
+</html>
